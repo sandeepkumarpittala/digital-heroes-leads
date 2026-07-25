@@ -1,0 +1,24 @@
+// ============================================
+// src/routes/ProtectedRoute.jsx
+// Guards private routes (e.g. /admin) using auth state
+//
+// If authenticated  -> renders the nested route via <Outlet />
+// If not authenticated -> redirects to /login, preserving
+//                          the originally attempted location
+// ============================================
+
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
+
+const ProtectedRoute = () => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <Outlet />;
+};
+
+export default ProtectedRoute;
